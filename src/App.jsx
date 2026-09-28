@@ -193,7 +193,7 @@ export default function App() {
             autoPlay
             muted
             loop
-            playInline
+            playsInline
             preload="auto"
             aria-label="Featured portfolio video">
              
