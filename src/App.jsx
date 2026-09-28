@@ -8,26 +8,24 @@ const navLinks = [
   { href: '#contact', label: 'Contact' },
 ];
 
-const filterOptions = [
-  { value: 'all', label: 'All' },
-  { value: 'reels', label: 'Reels' },
-  { value: 'cinematic', label: 'Cinematic' },
-  { value: 'youtube', label: 'YouTube' },
-  { value: 'events', label: 'Events' },
-  { value: 'commercial', label: 'Commercial' },
-  { value: '2d motion', label: '2D Motion' },
-  { value: 'motion graphics', label: 'Motion Graphics' },
-  { value: '3d motion', label: '3D Motion' },
-  { value: 'short-form', label: 'Short-form' },
-  { value: 'long-form', label: 'Long-form' },
-];
+const buildFilterOptions = (videos) => {
+  const categories = [...new Set(videos.map((video) => video.category))];
+
+  return [
+    { value: 'all', label: 'All' },
+    ...categories.map((category) => ({
+      value: category.toLowerCase(),
+      label: category,
+    })),
+  ];
+};
 
 export default function App() {
   const [activeFilter, setActiveFilter] = useState('all');
   const [activeNav, setActiveNav] = useState('top');
   const [navOpen, setNavOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
+  const [currentProjectId, setCurrentProjectId] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [portfolioData, setPortfolioData] = useState({ videos: [], images: [] });
 
@@ -46,7 +44,8 @@ export default function App() {
   }, []);
 
   const portfolioProjects = portfolioData.videos;
-  const galleryImages = portfolioData.images.map((item) => item.src);
+  const galleryItems = portfolioData.images;
+  const filterOptions = useMemo(() => buildFilterOptions(portfolioProjects), [portfolioProjects]);
 
   const visibleProjects = useMemo(() => {
     if (activeFilter === 'all') {
@@ -107,8 +106,8 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [modalOpen]);
 
-  const openLightbox = (index) => {
-    setCurrentProjectIndex(index);
+  const openLightbox = (id) => {
+    setCurrentProjectId(Number(id));
     setModalOpen(true);
   };
 
@@ -117,8 +116,10 @@ export default function App() {
   };
 
   const shiftProject = (offset) => {
-    const nextIndex = (currentProjectIndex + offset + portfolioProjects.length) % portfolioProjects.length;
-    setCurrentProjectIndex(nextIndex);
+    const currentIndex = portfolioProjects.findIndex((project) => project.id === currentProjectId);
+    const safeIndex = currentIndex >= 0 ? currentIndex : 0;
+    const nextIndex = (safeIndex + offset + portfolioProjects.length) % portfolioProjects.length;
+    setCurrentProjectId(portfolioProjects[nextIndex]?.id ?? 0);
   };
 
   const handleSubmit = (event) => {
@@ -131,7 +132,7 @@ export default function App() {
     }, 1600);
   };
 
-  const currentProject = portfolioProjects[currentProjectIndex] || { title: '', category: '', video: '' };
+  const currentProject = portfolioProjects.find((project) => project.id === currentProjectId) || portfolioProjects[0] || { title: '', category: '', video: '' };
 
   return (
     <>
@@ -188,14 +189,14 @@ export default function App() {
           </div>
 
           <div className="container hero__rail reveal">
-            {[0, 1, 2].map((index) => (
-              <article key={index} className="mini-project" onClick={() => openLightbox(index)}>
-                <video muted preload="metadata" aria-label="Portfolio video thumbnail">
-                  <source src={portfolioProjects[index]?.video ?? ''} type="video/mp4" />
+            {portfolioProjects.slice(0, 3).map((project) => (
+              <article key={project.id} className="mini-project" onClick={() => openLightbox(project.id)}>
+                <video muted preload="metadata" aria-label={project.title}>
+                  <source src={project.video} type="video/mp4" />
                 </video>
                 <div className="mini-project__info">
-                  <strong>{index === 0 ? 'Showreel' : index === 1 ? 'Brand Story' : 'Quiet Story'}</strong>
-                  <span>{index === 0 ? 'Reels' : index === 1 ? 'Cinematic' : 'YouTube'}</span>
+                  <strong>{project.title}</strong>
+                  <span>{project.category}</span>
                 </div>
               </article>
             ))}
@@ -226,12 +227,12 @@ export default function App() {
             </div>
 
             <div className="portfolio-grid reveal" id="portfolioGrid">
-              {visibleProjects.map((project, index) => (
+              {visibleProjects.map((project) => (
                 <article
-                  key={`${project.title}-${index}`}
+                  key={project.id}
                   className="portfolio-card"
                   data-category={project.category.toLowerCase()}
-                  onClick={() => openLightbox(portfolioProjects.indexOf(project))}
+                  onClick={() => openLightbox(project.id)}
                 >
                   <video preload="metadata" loading="lazy" muted>
                     <source src={project.video} type="video/mp4" />
@@ -241,7 +242,7 @@ export default function App() {
                       <strong>{project.title}</strong>
                       <span>{project.category}</span>
                     </div>
-                    <span className="card-action" onClick={(event) => { event.stopPropagation(); openLightbox(portfolioProjects.indexOf(project)); }}>
+                    <span className="card-action" onClick={(event) => { event.stopPropagation(); openLightbox(project.id); }}>
                       +
                     </span>
                   </div>
@@ -339,9 +340,9 @@ export default function App() {
               </div>
             </div>
             <div className="gallery-grid reveal" id="galleryGrid">
-              {galleryImages.map((src) => (
-                <figure key={src} className="gallery-item">
-                  <img src={src} alt="Portfolio visual" loading="lazy" />
+              {galleryItems.map((image) => (
+                <figure key={image.id} className="gallery-item">
+                  <img src={image.src} alt={image.alt || 'Portfolio visual'} loading="lazy" />
                 </figure>
               ))}
             </div>
