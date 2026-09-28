@@ -20,6 +20,23 @@ const buildFilterOptions = (videos) => {
   ];
 };
 
+const withBaseUrl = (url) => {
+  if (!url) return url;
+  const normalizedPath = url.replace(/^\/+/, '');
+  return `${import.meta.env.BASE_URL}${encodeURI(normalizedPath)}`;
+};
+
+const normalizePortfolioData = (data) => ({
+  videos: (data.videos || []).map((video) => ({
+    ...video,
+    video: withBaseUrl(video.video),
+  })),
+  images: (data.images || []).map((image) => ({
+    ...image,
+    src: withBaseUrl(image.src),
+  })),
+});
+
 export default function App() {
   const [activeFilter, setActiveFilter] = useState('all');
   const [activeNav, setActiveNav] = useState('top');
@@ -30,13 +47,10 @@ export default function App() {
   const [portfolioData, setPortfolioData] = useState({ videos: [], images: [] });
 
   useEffect(() => {
-    fetch('/assets/portfolio.json')
+    fetch(`${import.meta.env.BASE_URL}assets/portfolio.json`)
       .then((response) => response.json())
       .then((data) => {
-        setPortfolioData({
-          videos: data.videos || [],
-          images: data.images || [],
-        });
+        setPortfolioData(normalizePortfolioData(data));
       })
       .catch(() => {
         setPortfolioData({ videos: [], images: [] });
