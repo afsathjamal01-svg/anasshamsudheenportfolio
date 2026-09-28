@@ -406,15 +406,15 @@ export default function App() {
 
               <div className="contact-list">
                 <div className="info-row"><span>Instagram</span><strong>@anas.cine</strong></div>
-                <div className="info-row"><span>Email</span><strong>hello@anasine.com</strong></div>
-                <div className="info-row"><span>WhatsApp</span><strong>+91 00000 00000</strong></div>
+                <div className="info-row"><span>Email</span><strong>Anashamsudheen9544@gmail.com</strong></div>
+                <div className="info-row"><span>WhatsApp</span><strong>+91 9633214193</strong></div>
                 <div className="info-row"><span>GitHub</span><a href="https://github.com/afsathjamal01-svg/anasshamsudheenportfolio" target="_blank" rel="noreferrer">Repository</a></div>
               </div>
 
               <div className="socials">
                 <a href="https://instagram.com/anas.cine" target="_blank" rel="noreferrer">◎</a>
                 <a href="mailto:hello@anasine.com">✉</a>
-                <a href="https://wa.me/910000000000" target="_blank" rel="noreferrer">✆</a>
+                <a href="https://wa.me/919633214193" target="_blank" rel="noreferrer">✆</a>
                 <a href="https://github.com/afsathjamal01-svg/anasshamsudheenportfolio" target="_blank" rel="noreferrer" aria-label="GitHub repository">GH</a>
               </div>
             </div>
