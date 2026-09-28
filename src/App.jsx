@@ -195,7 +195,7 @@ export default function App() {
             loop
             playInline
             preload="auto"
-            aria-label="Featured portfolio video"/>
+            aria-label="Featured portfolio video">
              
           </video>
           <div className="hero__overlay" />
