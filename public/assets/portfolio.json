@@ -1,0 +1,40 @@
+{
+  "videos": [
+    {
+      "title": "Anas PKD Portfolio",
+      "category": "Reels",
+      "video": "/assets/videos/anas%20pkd%20portfolio%20final%20out.mp4"
+    },
+    {
+      "title": "Wedding Highlight",
+      "category": "Events",
+      "video": "/assets/videos/Wedding%20video%201.mp4"
+    },
+    {
+      "title": "Short-form Motion",
+      "category": "Short-form",
+      "video": "/assets/videos/short_form/short_form1.mp4"
+    },
+    {
+      "title": "Social Story Cut",
+      "category": "Short-form",
+      "video": "/assets/videos/short_form/short_form2.mp4"
+    },
+    {
+      "title": "Brand Motion",
+      "category": "Motion Graphics",
+      "video": "/assets/videos/motion_graphics/motion_graphics1.mp4"
+    },
+    {
+      "title": "SaaS Motion Graphics",
+      "category": "Motion Graphics",
+      "video": "/assets/videos/motion_graphics/motion_graphics2.mp4"
+    }
+  ],
+  "images": [
+    { "src": "/assets/ Ai images/image1.png", "alt": "Portfolio gallery image 1" },
+    { "src": "/assets/ Ai images/image2.png", "alt": "Portfolio gallery image 2" },
+    { "src": "/assets/ Ai images/image3.png", "alt": "Portfolio gallery image 3" },
+    { "src": "/assets/ Ai images/image4.png", "alt": "Portfolio gallery image 4" }
+  ]
+}

@@ -1,66 +1,41 @@
 const portfolioProjects = [
   {
     title: 'Anas PKD Portfolio',
-    category: 'Showreel',
-    video: 'assets/CreativeMotion_edit/anas pkd portfolio final out.mp4'
-  },
-  {
-    title: '3D Coca Cola Animation',
-    category: '3D Motion',
-    video: 'assets/CreativeMotion_edit/3d animation coco cola ,anascine.mp4'
+    category: 'Reels',
+    video: encodeURI('/assets/videos/anas pkd portfolio final out.mp4')
   },
   {
     title: 'Wedding Highlight',
     category: 'Events',
-    video: 'assets/CreativeMotion_edit/Wedding video 1.mp4'
-  },
-  {
-    title: 'Celebrity 2D Motion',
-    category: '2D Motion',
-    video: 'assets/CreativeMotion_edit/2D_Motion/Celebrity 2d motion.mp4'
-  },
-  {
-    title: 'Celebrity 2D Motion 2',
-    category: '2D Motion',
-    video: 'assets/CreativeMotion_edit/2D_Motion/3 Celebrity 2d motion.mp4'
-  },
-  {
-    title: 'Basic Video Edit',
-    category: 'Video Editing',
-    video: 'assets/CreativeMotion_edit/2D_Motion/Basic video edit.mp4'
-  },
-  {
-    title: 'Vertical Edit',
-    category: 'Short-form',
-    video: 'assets/CreativeMotion_edit/2D_Motion/VID_20260725_145920_902.mp4'
+    video: encodeURI('/assets/videos/Wedding video 1.mp4')
   },
   {
     title: 'Short-form Motion',
-    category: 'Motion Graphics',
-    video: 'assets/CreativeMotion_edit/Motion_graphics/1Short form  anascine.mp4'
+    category: 'Short-form',
+    video: encodeURI('/assets/videos/short_form/short_form1.mp4')
   },
   {
-    title: 'Pregnancy Explainer',
+    title: 'Social Story Cut',
+    category: 'Short-form',
+    video: encodeURI('/assets/videos/short_form/short_form2.mp4')
+  },
+  {
+    title: 'Brand Motion',
     category: 'Motion Graphics',
-    video: 'assets/CreativeMotion_edit/Motion_graphics/Copy of 4_10 pregnancy about baby.mp4'
+    video: encodeURI('/assets/videos/motion_graphics/motion_graphics1.mp4')
   },
   {
     title: 'SaaS Motion Graphics',
     category: 'Motion Graphics',
-    video: 'assets/CreativeMotion_edit/Motion_graphics/GPT5-6,Saas Motion graphics anascine.mp4'
-  },
-  {
-    title: 'Long-form Edit',
-    category: 'Long-form',
-    video: 'assets/CreativeMotion_edit/Motion_graphics/long-form by anascine.mp4'
+    video: encodeURI('/assets/videos/motion_graphics/motion_graphics2.mp4')
   }
 ];
 
 const galleryImages = [
-  'assets/ai_images/0a3d82f9-6262-4c79-81c2-fade001b0964.png',
-  'assets/ai_images/10de93a6-141b-49c6-8a14-840c99fee81c.png',
-  'assets/ai_images/18793ba2-2ab8-480b-a65c-438bbde07daa.png',
-  'assets/ai_images/264e9539-cfa9-4613-bd67-2652b9695e96.png'
+  encodeURI('/assets/ Ai images/image1.png'),
+  encodeURI('/assets/ Ai images/image2.png'),
+  encodeURI('/assets/ Ai images/image3.png'),
+  encodeURI('/assets/ Ai images/image4.png')
 ];
 
 const navToggle = document.querySelector('.nav-toggle');

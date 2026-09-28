@@ -1,70 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 
-const portfolioProjects = [
-  {
-    title: 'Anas PKD Portfolio',
-    category: 'Reels',
-    video: 'assets/CreativeMotion_edit/anas pkd portfolio final out.mp4',
-  },
-  {
-    title: '3D Coca Cola Animation',
-    category: '3D Motion',
-    video: 'assets/CreativeMotion_edit/3d animation coco cola ,anascine.mp4',
-  },
-  {
-    title: 'Wedding Highlight',
-    category: 'Events',
-    video: 'assets/CreativeMotion_edit/Wedding video 1.mp4',
-  },
-  {
-    title: 'Celebrity 2D Motion',
-    category: '2D Motion',
-    video: 'assets/CreativeMotion_edit/2D_Motion/Celebrity 2d motion.mp4',
-  },
-  {
-    title: 'Celebrity 2D Motion 2',
-    category: '2D Motion',
-    video: 'assets/CreativeMotion_edit/2D_Motion/3 Celebrity 2d motion.mp4',
-  },
-  {
-    title: 'Basic Video Edit',
-    category: 'Video Editing',
-    video: 'assets/CreativeMotion_edit/2D_Motion/Basic video edit.mp4',
-  },
-  {
-    title: 'Vertical Edit',
-    category: 'Short-form',
-    video: 'assets/CreativeMotion_edit/2D_Motion/VID_20260725_145920_902.mp4',
-  },
-  {
-    title: 'Short-form Motion',
-    category: 'Motion Graphics',
-    video: 'assets/CreativeMotion_edit/Motion_graphics/1Short form  anascine.mp4',
-  },
-  {
-    title: 'Pregnancy Explainer',
-    category: 'Motion Graphics',
-    video: 'assets/CreativeMotion_edit/Motion_graphics/Copy of 4_10 pregnancy about baby.mp4',
-  },
-  {
-    title: 'SaaS Motion Graphics',
-    category: 'Motion Graphics',
-    video: 'assets/CreativeMotion_edit/Motion_graphics/GPT5-6,Saas Motion graphics anascine.mp4',
-  },
-  {
-    title: 'Long-form Edit',
-    category: 'Long-form',
-    video: 'assets/CreativeMotion_edit/Motion_graphics/long-form by anascine.mp4',
-  },
-];
-
-const galleryImages = [
-  'assets/ai_images/0a3d82f9-6262-4c79-81c2-fade001b0964.png',
-  'assets/ai_images/10de93a6-141b-49c6-8a14-840c99fee81c.png',
-  'assets/ai_images/18793ba2-2ab8-480b-a65c-438bbde07daa.png',
-  'assets/ai_images/264e9539-cfa9-4613-bd67-2652b9695e96.png',
-];
-
 const navLinks = [
   { href: '#top', label: 'Home' },
   { href: '#portfolio', label: 'Work' },
@@ -94,6 +29,24 @@ export default function App() {
   const [modalOpen, setModalOpen] = useState(false);
   const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [portfolioData, setPortfolioData] = useState({ videos: [], images: [] });
+
+  useEffect(() => {
+    fetch('/assets/portfolio.json')
+      .then((response) => response.json())
+      .then((data) => {
+        setPortfolioData({
+          videos: data.videos || [],
+          images: data.images || [],
+        });
+      })
+      .catch(() => {
+        setPortfolioData({ videos: [], images: [] });
+      });
+  }, []);
+
+  const portfolioProjects = portfolioData.videos;
+  const galleryImages = portfolioData.images.map((item) => item.src);
 
   const visibleProjects = useMemo(() => {
     if (activeFilter === 'all') {
@@ -101,7 +54,7 @@ export default function App() {
     }
 
     return portfolioProjects.filter((project) => project.category.toLowerCase() === activeFilter);
-  }, [activeFilter]);
+  }, [activeFilter, portfolioProjects]);
 
   useEffect(() => {
     const revealItems = document.querySelectorAll('.reveal');
@@ -178,7 +131,7 @@ export default function App() {
     }, 1600);
   };
 
-  const currentProject = portfolioProjects[currentProjectIndex];
+  const currentProject = portfolioProjects[currentProjectIndex] || { title: '', category: '', video: '' };
 
   return (
     <>
@@ -220,7 +173,7 @@ export default function App() {
       <main id="top">
         <section className="hero">
           <video className="hero-video" autoPlay muted loop playsInline aria-label="Featured portfolio video">
-            <source src="assets/CreativeMotion_edit/anas pkd portfolio final out.mp4" type="video/mp4" />
+            <source src={portfolioProjects[0]?.video ?? ''} type="video/mp4" />
           </video>
           <div className="hero__overlay" />
 
@@ -238,7 +191,7 @@ export default function App() {
             {[0, 1, 2].map((index) => (
               <article key={index} className="mini-project" onClick={() => openLightbox(index)}>
                 <video muted preload="metadata" aria-label="Portfolio video thumbnail">
-                  <source src={portfolioProjects[index].video} type="video/mp4" />
+                  <source src={portfolioProjects[index]?.video ?? ''} type="video/mp4" />
                 </video>
                 <div className="mini-project__info">
                   <strong>{index === 0 ? 'Showreel' : index === 1 ? 'Brand Story' : 'Quiet Story'}</strong>
@@ -302,7 +255,7 @@ export default function App() {
           <div className="container featured-layout">
             <div className="featured-media reveal">
               <video controls preload="metadata" playsInline aria-label="Featured project video">
-                <source src="assets/CreativeMotion_edit/anas pkd portfolio final out.mp4" type="video/mp4" />
+                <source src={portfolioProjects[0]?.video ?? ''} type="video/mp4" />
               </video>
             </div>
 
