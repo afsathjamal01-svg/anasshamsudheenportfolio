@@ -187,8 +187,16 @@ export default function App() {
 
       <main id="top">
         <section className="hero">
-          <video className="hero-video" autoPlay muted loop playsInline aria-label="Featured portfolio video">
-            <source src={portfolioProjects[0]?.video ?? ''} type="video/mp4" />
+          <video  key={portfolioProjects[0]?.video ?? 'hero-video'}
+            className="hero-video" 
+            src={portfolioProjects[0]?.video ?? ''}
+            autoPlay
+            muted
+            loop
+            playInline
+            preload="auto"
+            aria-label="Featured portfolio video"/>
+             
           </video>
           <div className="hero__overlay" />
 
