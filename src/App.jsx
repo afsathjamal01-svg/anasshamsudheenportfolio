@@ -8,8 +8,12 @@ const navLinks = [
   { href: '#contact', label: 'Contact' },
 ];
 
+const normalizeText = (value) => (typeof value === 'string' ? value.trim() : '');
+
 const buildFilterOptions = (videos) => {
-  const categories = [...new Set(videos.map((video) => video.category))];
+  const categories = [...new Set(videos
+    .map((video) => normalizeText(video.category))
+    .filter(Boolean))];
 
   return [
     { value: 'all', label: 'All' },
@@ -27,10 +31,12 @@ const withBaseUrl = (url) => {
 };
 
 const normalizePortfolioData = (data) => ({
-  videos: (data.videos || []).map((video) => ({
-    ...video,
-    video: withBaseUrl(video.video),
-  })),
+  videos: (data.videos || [])
+    .map((video) => ({
+      ...video,
+      video: withBaseUrl(video.video),
+    }))
+    .filter((video) => normalizeText(video.video) && normalizeText(video.title)),
 });
 
 export default function App() {
@@ -62,6 +68,11 @@ export default function App() {
   }, []);
 
   const portfolioProjects = portfolioData.videos;
+  const featuredProject = useMemo(
+    () => portfolioProjects.find((project) => project.video && project.video.trim()) || portfolioProjects[0] || null,
+    [portfolioProjects],
+  );
+  const featuredVideoSrc = featuredProject?.video ?? '';
   const filterOptions = useMemo(() => buildFilterOptions(portfolioProjects), [portfolioProjects]);
 
   const visibleProjects = useMemo(() => {
@@ -69,7 +80,7 @@ export default function App() {
       return portfolioProjects;
     }
 
-    return portfolioProjects.filter((project) => project.category.toLowerCase() === activeFilter);
+    return portfolioProjects.filter((project) => normalizeText(project.category).toLowerCase() === activeFilter);
   }, [activeFilter, portfolioProjects]);
 
   useEffect(() => {
@@ -238,16 +249,8 @@ export default function App() {
 
       <main id="top">
         <section className="hero">
-          <video  key={portfolioProjects[0]?.video ?? 'hero-video'}
-            className="hero-video" 
-            src={portfolioProjects[0]?.video ?? ''}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            aria-label="Featured portfolio video">
-             
+          <video className="hero-video" autoPlay muted loop playsInline aria-label="Featured portfolio video">
+            <source src={portfolioProjects[0]?.video ?? ''} type="video/mp4" />
           </video>
           <div className="hero__overlay" />
 
@@ -325,26 +328,28 @@ export default function App() {
           </div>
         </section>
 
-        <section className="featured-project section">
-          <div className="container featured-layout">
-            <div className="featured-media reveal">
-              <video controls preload="metadata" playsInline aria-label="Featured project video">
-                <source src={portfolioProjects[0]?.video ?? ''} type="video/mp4" />
-              </video>
-            </div>
+        {featuredProject && (
+          <section className="featured-project section">
+            <div className="container featured-layout">
+              <div className="featured-media reveal">
+                <video controls preload="metadata" playsInline aria-label="Featured project video">
+                  <source src={featuredVideoSrc} type="video/mp4" />
+                </video>
+              </div>
 
-            <div className="featured-copy reveal">
-              <span className="section-label">Featured Project</span>
-              <p>
-                A cinematic overview of the editing style, pacing, type-driven motion and visual storytelling that define the portfolio.
-              </p>
-              <div className="featured-meta">
-                <span>Category: Reels</span>
-                <a href="#portfolio" className="button button--primary">Watch Project</a>
+              <div className="featured-copy reveal">
+                <span className="section-label">Featured Project</span>
+                <p>
+                  A cinematic overview of the editing style, pacing, type-driven motion and visual storytelling that define the portfolio.
+                </p>
+                <div className="featured-meta">
+                  <span>Category: {featuredProject.category}</span>
+                  <a href="#portfolio" className="button button--primary">Watch Project</a>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         <section id="about" className="section about-section">
           <div className="container about-grid">
