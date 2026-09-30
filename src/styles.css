@@ -346,10 +346,15 @@ button {
   color: var(--text);
 }
 
+#portfolio.section {
+  padding-bottom: 0;
+}
+
 .portfolio-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(220px, 1fr));
   gap: 22px;
+  margin-bottom: 0;
 }
 
 .portfolio-card {
@@ -753,7 +758,10 @@ button {
 .hidden { display: none !important; }
 
 @media (max-width: 980px) {
-  .hero__rail,
+  .hero__rail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .portfolio-grid,
   .services-grid,
   .featured-layout,
@@ -796,6 +804,24 @@ button {
   .hero {
     min-height: 86vh;
     padding-top: 40px;
+  }
+
+  .hero__rail {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .mini-project {
+    grid-template-columns: 84px 1fr;
+    padding: 10px;
+  }
+
+  .mini-project__info strong {
+    font-size: 0.92rem;
+  }
+
+  .mini-project__info span {
+    letter-spacing: 0.08em;
   }
 
   .hero__rail,

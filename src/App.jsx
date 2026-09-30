@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 const navLinks = [
   { href: '#top', label: 'Home' },
@@ -39,6 +39,19 @@ const normalizePortfolioData = (data) => ({
     .filter((video) => normalizeText(video.video) && normalizeText(video.title)),
 });
 
+const defaultPortfolioData = normalizePortfolioData({
+  videos: [
+    { id: 0, title: 'Portfolio Reel', category: 'Reels', video: '/assets/videos/Portfolio.mp4' },
+    { id: 1, title: 'Brand Story Reel', category: 'Short-form', video: '/assets/videos/short_form/short_form1.mp4' },
+    { id: 2, title: 'Fast-Paced Promo', category: 'Short-form', video: '/assets/videos/short_form/short_form2.mp4' },
+    { id: 3, title: 'Social Media Highlight', category: 'Short-form', video: '/assets/videos/short_form/short_form3.mp4' },
+    { id: 4, title: 'Product Launch Teaser', category: 'Short-form', video: '/assets/videos/short_form/short_form4.mp4' },
+    { id: 5, title: 'Brand Motion Graphics', category: 'Motion Graphics', video: '/assets/videos/motion_graphics/motion_graphics1.mp4' },
+    { id: 6, title: 'SaaS Intro Animation', category: 'Motion Graphics', video: '/assets/videos/motion_graphics/motion_graphics2.mp4' },
+    { id: 7, title: 'Long-Form Brand Story', category: 'Long-form', video: '/assets/videos/long_form/long_form1.mp4' },
+  ],
+});
+
 export default function App() {
   const [activeFilter, setActiveFilter] = useState('all');
   const [activeNav, setActiveNav] = useState('top');
@@ -47,7 +60,8 @@ export default function App() {
   const [currentProjectId, setCurrentProjectId] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [validationError, setValidationError] = useState('');
-  const [portfolioData, setPortfolioData] = useState({ videos: [] });
+  const [portfolioData, setPortfolioData] = useState(defaultPortfolioData);
+  const heroVideoRef = useRef(null);
   const [inquiryForm, setInquiryForm] = useState({
     name: '',
     email: '',
@@ -63,7 +77,7 @@ export default function App() {
         setPortfolioData(normalizePortfolioData(data));
       })
       .catch(() => {
-        setPortfolioData({ videos: [] });
+        setPortfolioData(defaultPortfolioData);
       });
   }, []);
 
@@ -74,6 +88,22 @@ export default function App() {
   );
   const featuredVideoSrc = featuredProject?.video ?? '';
   const filterOptions = useMemo(() => buildFilterOptions(portfolioProjects), [portfolioProjects]);
+
+  useEffect(() => {
+    const heroVideo = heroVideoRef.current;
+    if (!heroVideo || !featuredVideoSrc) return;
+
+    heroVideo.muted = true;
+    const playVideo = async () => {
+      try {
+        await heroVideo.play();
+      } catch {
+        // Browsers may block programmatic playback until user interaction; the video remains muted and ready.
+      }
+    };
+
+    playVideo();
+  }, [featuredVideoSrc]);
 
   const visibleProjects = useMemo(() => {
     if (activeFilter === 'all') {
@@ -101,6 +131,47 @@ export default function App() {
 
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    const videoNodes = Array.from(document.querySelectorAll('video'));
+
+    if (!videoNodes.length) {
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const video = entry.target;
+          const shouldResume = video.dataset.resumeOnVisible === 'true';
+
+          if (entry.isIntersecting) {
+            if (shouldResume) {
+              const playPromise = video.play();
+              if (playPromise) {
+                playPromise.catch(() => {});
+              }
+            }
+            video.dataset.resumeOnVisible = shouldResume ? 'true' : 'false';
+            return;
+          }
+
+          if (!video.paused && !video.ended) {
+            video.dataset.resumeOnVisible = 'true';
+          }
+          video.pause();
+        });
+      },
+      { threshold: 0.15 },
+    );
+
+    videoNodes.forEach((video) => {
+      video.dataset.resumeOnVisible = 'false';
+      observer.observe(video);
+    });
+
+    return () => observer.disconnect();
+  }, [portfolioData]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -249,8 +320,17 @@ export default function App() {
 
       <main id="top">
         <section className="hero">
-          <video className="hero-video" autoPlay muted loop playsInline aria-label="Featured portfolio video">
-            <source src={portfolioProjects[0]?.video ?? ''} type="video/mp4" />
+          <video
+            ref={heroVideoRef}
+            key={featuredVideoSrc || 'hero-video-placeholder'}
+            className="hero-video"
+            autoPlay
+            muted
+            loop
+            playsInline
+            aria-label="Featured portfolio video"
+          >
+            <source src={featuredVideoSrc || ''} type="video/mp4" />
           </video>
           <div className="hero__overlay" />
 
