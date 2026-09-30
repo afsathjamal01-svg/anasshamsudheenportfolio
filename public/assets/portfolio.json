@@ -2,15 +2,15 @@
   "videos": [
     {
       "id": 0,
-      "title": "Anas PKD Portfolio",
+      "title": "Portfolio Reel",
       "category": "Reels",
-      "video": "/assets/videos/ Anas_portfolio.mp4"
+      "video": "/assets/videos/Anas_portfolio.mp4"
     },
     {
       "id": 1,
       "title": "Wedding Highlight",
       "category": "Events",
-      "video": "/assets/videos/ wedding_video.mp4"
+      "video": "/assets/videos/Wedding_video.mp4"
     },
     {
       "id": 2,
@@ -19,28 +19,40 @@
       "video": "/assets/videos/short_form/short_form1.mp4"
     },
     {
-      "id": 3,
-      "title": "Social Story Cut",
+      "id": 2,
+      "title": "Brand Story Reel",
       "category": "Short-form",
       "video": "/assets/videos/short_form/short_form2.mp4"
     },
     {
+      "id": 3,
+      "title": "Fast-Paced Promo",
+      "category": "Short-form",
+      "video": "/assets/videos/short_form/short_form3.mp4"
+    },
+    {
       "id": 4,
-      "title": "Brand Motion",
+      "title": "Social Media Highlight",
+      "category": "Short-form",
+      "video": "/assets/videos/short_form/short_form4.mp4"
+    },
+    {
+      "id": 5,
+      "title": "Brand Motion Graphics",
       "category": "Motion Graphics",
       "video": "/assets/videos/motion_graphics/motion_graphics1.mp4"
     },
     {
-      "id": 5,
-      "title": "SaaS Motion Graphics",
+      "id": 6,
+      "title": "SaaS Intro Animation",
       "category": "Motion Graphics",
       "video": "/assets/videos/motion_graphics/motion_graphics2.mp4"
+    },
+    {
+      "id": 7,
+      "title": "Long-Form Brand Story",
+      "category": "Long-form",
+      "video": "/assets/videos/long_form/long_form1.mp4"
     }
-  ],
-  "images": [
-    { "id": 0, "src": "/assets/ Ai images/image1.png", "alt": "Portfolio gallery image 1" },
-    { "id": 1, "src": "/assets/ Ai images/image2.png", "alt": "Portfolio gallery image 2" },
-    { "id": 2, "src": "/assets/ Ai images/image3.png", "alt": "Portfolio gallery image 3" },
-    { "id": 3, "src": "/assets/ Ai images/image4.png", "alt": "Portfolio gallery image 4" }
   ]
 }

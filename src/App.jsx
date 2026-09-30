@@ -31,10 +31,6 @@ const normalizePortfolioData = (data) => ({
     ...video,
     video: withBaseUrl(video.video),
   })),
-  images: (data.images || []).map((image) => ({
-    ...image,
-    src: withBaseUrl(image.src),
-  })),
 });
 
 export default function App() {
@@ -44,7 +40,15 @@ export default function App() {
   const [modalOpen, setModalOpen] = useState(false);
   const [currentProjectId, setCurrentProjectId] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [portfolioData, setPortfolioData] = useState({ videos: [], images: [] });
+  const [validationError, setValidationError] = useState('');
+  const [portfolioData, setPortfolioData] = useState({ videos: [] });
+  const [inquiryForm, setInquiryForm] = useState({
+    name: '',
+    email: '',
+    projectType: 'Social Media Reel',
+    projectCategory: 'Motion Graphics',
+    message: '',
+  });
 
   useEffect(() => {
     fetch(`${import.meta.env.BASE_URL}assets/portfolio.json`)
@@ -53,12 +57,11 @@ export default function App() {
         setPortfolioData(normalizePortfolioData(data));
       })
       .catch(() => {
-        setPortfolioData({ videos: [], images: [] });
+        setPortfolioData({ videos: [] });
       });
   }, []);
 
   const portfolioProjects = portfolioData.videos;
-  const galleryItems = portfolioData.images;
   const filterOptions = useMemo(() => buildFilterOptions(portfolioProjects), [portfolioProjects]);
 
   const visibleProjects = useMemo(() => {
@@ -136,13 +139,61 @@ export default function App() {
     setCurrentProjectId(portfolioProjects[nextIndex]?.id ?? 0);
   };
 
+  const handleInquiryChange = (event) => {
+    const { name, value } = event.target;
+    setInquiryForm((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
+
+    if (validationError) {
+      setValidationError('');
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    const name = inquiryForm.name.trim();
+    const email = inquiryForm.email.trim();
+    const message = inquiryForm.message.trim();
+
+    if (!name || !email || !message) {
+      setValidationError('Please fill in your name, email and project details before sending the inquiry.');
+      return;
+    }
+
+    setValidationError('');
+
+    const whatsappMessage = [
+      'Hi Anas,',
+      'I would like to enquire about a project.',
+      `Name: ${name}`,
+      `Email: ${email}`,
+      `Project Type: ${inquiryForm.projectType}`,
+      `Project Category: ${inquiryForm.projectCategory}`,
+      `Project Details: ${message}`,
+      '',
+      'Please get back to me with the next steps.',
+    ].join('\n');
+
+    window.open(
+      `https://wa.me/919633214193?text=${encodeURIComponent(whatsappMessage)}`,
+      '_blank',
+      'noopener,noreferrer',
+    );
+
     setIsSubmitted(true);
 
     window.setTimeout(() => {
       setIsSubmitted(false);
-      event.target.reset();
+      setInquiryForm({
+        name: '',
+        email: '',
+        projectType: 'Social Media Reel',
+        projectCategory: 'Motion Graphics',
+        message: '',
+      });
     }, 1600);
   };
 
@@ -284,7 +335,6 @@ export default function App() {
 
             <div className="featured-copy reveal">
               <span className="section-label">Featured Project</span>
-              <h3>Showreel</h3>
               <p>
                 A cinematic overview of the editing style, pacing, type-driven motion and visual storytelling that define the portfolio.
               </p>
@@ -353,24 +403,6 @@ export default function App() {
           </div>
         </section>
 
-        <section className="section gallery-section">
-          <div className="container">
-            <div className="section-head reveal">
-              <div>
-                <span className="section-label">Visual Gallery</span>
-                <h2>IMAGE GALLERY</h2>
-              </div>
-            </div>
-            <div className="gallery-grid reveal" id="galleryGrid">
-              {galleryItems.map((image) => (
-                <figure key={image.id} className="gallery-item">
-                  <img src={image.src} alt={image.alt || 'Portfolio visual'} loading="lazy" />
-                </figure>
-              ))}
-            </div>
-          </div>
-        </section>
-
         <section id="contact" className="section contact-section">
           <div className="container contact-layout">
             <div className="contact-panel reveal">
@@ -382,16 +414,14 @@ export default function App() {
 
               <div className="contact-list">
                 <div className="info-row"><span>Instagram</span><strong>@anas.cine</strong></div>
-                <div className="info-row"><span>Email</span><strong>Anashamsudheen9544@gmail.com</strong></div>
+                <div className="info-row"><span>Email</span><strong>Anasshamsudheen9544@gmail.com</strong></div>
                 <div className="info-row"><span>WhatsApp</span><strong>+91 9633214193</strong></div>
-                <div className="info-row"><span>GitHub</span><a href="https://github.com/afsathjamal01-svg/anasshamsudheenportfolio" target="_blank" rel="noreferrer">Repository</a></div>
               </div>
 
               <div className="socials">
                 <a href="https://instagram.com/anas.cine" target="_blank" rel="noreferrer">◎</a>
                 <a href="mailto:hello@anasine.com">✉</a>
                 <a href="https://wa.me/919633214193" target="_blank" rel="noreferrer">✆</a>
-                <a href="https://github.com/afsathjamal01-svg/anasshamsudheenportfolio" target="_blank" rel="noreferrer" aria-label="GitHub repository">GH</a>
               </div>
             </div>
 
@@ -399,19 +429,19 @@ export default function App() {
               <div className="field-row">
                 <div className="field">
                   <label htmlFor="name">Name</label>
-                  <input id="name" type="text" name="name" placeholder="Your name" />
+                  <input id="name" type="text" name="name" value={inquiryForm.name} onChange={handleInquiryChange} placeholder="Your name" />
                 </div>
 
                 <div className="field">
                   <label htmlFor="email">Email</label>
-                  <input id="email" type="email" name="email" placeholder="Your email" />
+                  <input id="email" type="email" name="email" value={inquiryForm.email} onChange={handleInquiryChange} placeholder="Your email" />
                 </div>
               </div>
 
               <div className="field-row">
                 <div className="field">
                   <label htmlFor="projectType">Project Type</label>
-                  <select id="projectType" name="projectType">
+                  <select id="projectType" name="projectType" value={inquiryForm.projectType} onChange={handleInquiryChange}>
                     <option>Social Media Reel</option>
                     <option>YouTube Editing</option>
                     <option>Cinematic Editing</option>
@@ -420,12 +450,26 @@ export default function App() {
                     <option>Color Grading</option>
                   </select>
                 </div>
+
+                <div className="field">
+                  <label htmlFor="projectCategory">Project Category</label>
+                  <select id="projectCategory" name="projectCategory" value={inquiryForm.projectCategory} onChange={handleInquiryChange}>
+                    <option>Motion Graphics</option>
+                    <option>Short-form Content</option>
+                    <option>Long-form Content</option>
+                    <option>Typography</option>
+                    <option>Real Estate</option>
+                    <option>Other</option>
+                  </select>
+                </div>
               </div>
 
               <div className="field">
                 <label htmlFor="message">Message</label>
-                <textarea id="message" name="message" placeholder="Tell me about your project..." />
+                <textarea id="message" name="message" value={inquiryForm.message} onChange={handleInquiryChange} placeholder="Tell me about your project..." required />
               </div>
+
+              {validationError && <p className="form-error">{validationError}</p>}
 
               <button type="submit" className="button button--primary" disabled={isSubmitted}>
                 {isSubmitted ? 'Inquiry Sent' : 'Send Inquiry'}
