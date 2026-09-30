@@ -1,55 +1,49 @@
 {
   "videos": [
     {
-      "id": 0,
+      "id": 1,
       "title": "Portfolio Reel",
       "category": "Reels",
-      "video": "/assets/videos/Anas_portfolio.mp4"
-    },
-    {
-      "id": 1,
-      "title": "Wedding Highlight",
-      "category": "Events",
-      "video": "/assets/videos/Wedding_video.mp4"
-    },
-    {
-      "id": 2,
-      "title": "Short-form1",
-      "category": "Short-form",
-      "video": "/assets/videos/short_form/short_form1.mp4"
+      "video": "/assets/videos/Portfolio.mp4"
     },
     {
       "id": 2,
       "title": "Brand Story Reel",
       "category": "Short-form",
-      "video": "/assets/videos/short_form/short_form2.mp4"
+      "video": "/assets/videos/short_form/short_form1.mp4"
     },
     {
       "id": 3,
       "title": "Fast-Paced Promo",
       "category": "Short-form",
-      "video": "/assets/videos/short_form/short_form3.mp4"
+      "video": "/assets/videos/short_form/short_form2.mp4"
     },
     {
       "id": 4,
       "title": "Social Media Highlight",
       "category": "Short-form",
-      "video": "/assets/videos/short_form/short_form4.mp4"
+      "video": "/assets/videos/short_form/short_form3.mp4"
     },
     {
       "id": 5,
+      "title": "Product Launch Teaser",
+      "category": "Short-form",
+      "video": "/assets/videos/short_form/short_form4.mp4"
+    },
+    {
+      "id": 6,
       "title": "Brand Motion Graphics",
       "category": "Motion Graphics",
       "video": "/assets/videos/motion_graphics/motion_graphics1.mp4"
     },
     {
-      "id": 6,
+      "id": 7,
       "title": "SaaS Intro Animation",
       "category": "Motion Graphics",
       "video": "/assets/videos/motion_graphics/motion_graphics2.mp4"
     },
     {
-      "id": 7,
+      "id": 8,
       "title": "Long-Form Brand Story",
       "category": "Long-form",
       "video": "/assets/videos/long_form/long_form1.mp4"
